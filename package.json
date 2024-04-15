@@ -1,0 +1,27 @@
+{
+  "name": "iotserver",
+  "version": "1.0.0",
+  "description": "IoT server",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LaMaldicionDeMandos/iotServer.git"
+  },
+  "keywords": [
+    "iot",
+    "mqtt",
+    "expressjs"
+  ],
+  "author": "Marcelo Pasut",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LaMaldicionDeMandos/iotServer/issues"
+  },
+  "homepage": "https://github.com/LaMaldicionDeMandos/iotServer#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
