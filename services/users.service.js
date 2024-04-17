@@ -18,6 +18,14 @@ class UsersService {
     #sendUserCodeToValidate(user) {
         emailService.sendRegistrationValidate(`${VALIDATION_URL}/${user._id}`, user.username, user.profile.first_name);
     }
+
+    getById = (id) => {
+        return repo.findUserById(id);
+    }
+
+    activeUser = (username) => {
+        return repo.update(username, {state: 'ACTIVE' });
+    }
 }
 
 const service = new UsersService();

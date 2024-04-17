@@ -37,7 +37,8 @@ class UserRepository {
     }
 
     update(username, delta) {
-        return db.User.where({username: username}).update(delta);
+        console.log("Try to update " + username + ": " + JSON.stringify(delta));
+        return db.User.where({username: username}).updateOne(delta);
     }
 
     deleteUser(id) {
