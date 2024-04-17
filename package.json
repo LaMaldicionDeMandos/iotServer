@@ -1,18 +1,27 @@
 {
   "name": "iotserver",
   "version": "0.0.0",
+  "engines": {
+    "node": ">=18.13.0",
+    "npm": ">=8.19.3"
+  },
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node -v & node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
     "express": "~4.16.1",
+    "express-partial-response": "^1.0.4",
+    "lodash": "^4.17.21",
     "mongoose": "^8.3.1",
     "morgan": "~1.9.1",
+    "node-mailjet": "^6.0.5",
     "passport": "^0.7.0",
     "passport-google-oauth": "^2.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "sha256": "^0.2.0"
   }
 }

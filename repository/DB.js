@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+console.log('Connect to ' + process.env.MONGODB_URI);
 const UserSchema = new Schema({
     _id: String,
     username: {type: String, index: true},
-    password: String
+    password: String,
+    state: String,
+    profile: {}
 }, {timestamps: true});
 
 const User = mongoose.model('User', UserSchema);

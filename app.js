@@ -1,10 +1,11 @@
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require('passport');
 
-const loginRouter = require('./routes/login');
+const authRouter = require('./routes/auth');
 
 const USE_WHITE_LIST = process.env.USE_CORS_ORIGIN_WHITE_LIST === 'true';
 
@@ -17,6 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/login', loginRouter);
+app.use('/auth', authRouter);
 
 module.exports = app;
