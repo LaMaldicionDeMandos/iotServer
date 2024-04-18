@@ -15,8 +15,8 @@ class UsersService {
         return newUser;
     }
 
-    #sendUserCodeToValidate(user) {
-        emailService.sendRegistrationValidate(`${VALIDATION_URL}/${user._id}`, user.username, user.profile.first_name);
+    getUser(username, password) {
+        return repo.findUserByQuery({username: username, password: sha(password)});
     }
 
     getById = (id) => {
@@ -25,6 +25,10 @@ class UsersService {
 
     activeUser = (username) => {
         return repo.update(username, {state: 'ACTIVE' });
+    }
+
+    #sendUserCodeToValidate(user) {
+        emailService.sendRegistrationValidate(`${VALIDATION_URL}/${user._id}`, user.username, user.profile.first_name);
     }
 }
 

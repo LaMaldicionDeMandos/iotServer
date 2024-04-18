@@ -9,9 +9,7 @@ const keepPropertiesAfter = require('./keepPropertiesAfter');
 const DEEP_LINK = process.env.DEEP_LINK;
 
 passport.use(new LocalStrategy({usernameField: 'username'}, (user, password, done) =>
-  authenticationService.login(user, password)
-    .then((accessToken) => done(null, accessToken))
-    .catch(err => done(null, err))
+  authenticationService.login(user, password).then((accessToken) => done(null, accessToken)).catch(err => done(null, err))
 ));
 
 router.post('/login', passport.authenticate('local', { session: false }),
