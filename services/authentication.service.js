@@ -11,6 +11,17 @@ class AuthenticationService {
         return this.#generateToken(user);
     }
 
+    googleLogin = async (username) => {
+        const user = await usersService.getByUsername(username);
+        if (!user) return Promise.reject({error: 'invalid_login'});
+        return this.#generateToken(user);
+    }
+
+    googleRegister = async (username, profile) => {
+        const user = await usersService.registerWithoutPassword(username, profile);
+        return this.#generateToken(user);
+    }
+
     #generateToken = (user) =>
       jwt.sign({username: user.username, id: user._id}, SECRET, {expiresIn: TOKEN_EXPIRATION});
 }

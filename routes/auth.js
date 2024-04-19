@@ -21,9 +21,19 @@ passport.use(new GoogleStrategy({
     scope: [ 'profile', 'email' ],
     state: false
   },
-  function verify(accessToken, refreshToken, auth, profile, cb) {
-    console.log(`Profile: ${JSON.stringify(profile)} Access Token ${accessToken}, Auth: ${JSON.stringify(auth)}`)
-    cb(null, {username: 'Podria devolver token de google y depaso hago uno parecido así uso el mismo'});
+  async (accessToken, refreshToken, auth, profile, cb) => {
+    const email = profile.emails[0].value;
+    if (email) {
+      authenticationService.googleLogin(email)
+        .then((user) => cb(null, user))
+        .catch(() => {
+          authenticationService.googleRegister(email, profile)
+            .then((accessToken) => cb(null, accessToken))
+            .catch(cb);
+        });
+    } else {
+      cb(new Error("Usuario no existe"));
+    }
   }
 ));
 
@@ -31,13 +41,13 @@ router.get('/login/google', passport.authenticate('google'));
 
 router.get('/oauth2/redirect/google',
   passport.authenticate('google', { session: false, failureRedirect: '/login', failureMessage: true }),
-  function(req, res) {
-    console.log(`Req: ${JSON.stringify(req)}`);
+  (req, res) => {
+    console.log(`User: ${JSON.stringify(req.user)}`);
     res.send(req.user);
   });
+
 router.post('/login', passport.authenticate('local', { session: false }),
   (req, res) => {
-    console.log(`User: ${req.user}`);
     if(!req.user.error) res.send(req.user);
     else res.status(401).send(req.user);
   });

@@ -15,6 +15,11 @@ class UsersService {
         return newUser;
     }
 
+    registerWithoutPassword = async (username, profile) => {
+        console.log(`Profile: ${JSON.stringify(profile)}`);
+        return repo.newUser({username, profile: _.pick(profile, ['displayName', 'provider']), state: repo.ACTIVE});
+    }
+
     getUser(username, password) {
         return repo.findUserByQuery({username: username, password: sha(password)});
     }
@@ -23,8 +28,12 @@ class UsersService {
         return repo.findUserById(id);
     }
 
+    getByUsername = (username) => {
+        return repo.findUserByUsername(username);
+    }
+
     activeUser = (username) => {
-        return repo.update(username, {state: 'ACTIVE' });
+        return repo.update(username, {state: repo.ACTIVE });
     }
 
     #sendUserCodeToValidate(user) {

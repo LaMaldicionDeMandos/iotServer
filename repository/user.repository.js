@@ -12,7 +12,7 @@ class UserRepository {
         userDTO.username = user.username;
         userDTO.password = user.password;
         userDTO.profile = user.profile;
-        userDTO.state = 'INACTIVE';
+        userDTO.state = user.state || 'INACTIVE';
         return (await userDTO.save()).toJSON();
     }
 
@@ -43,6 +43,10 @@ class UserRepository {
 
     deleteUser(id) {
         return db.User.deleteOne({_id: id});
+    }
+
+    get ACTIVE() {
+        return 'ACTIVE';
     }
 
     #existsUser(username) {
