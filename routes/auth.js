@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require('passport-google-oauth20');
 const authenticationService = require('../services/authentication.service');
 const usersService = require('../services/users.service');
 const keepPropertiesAfter = require('./keepPropertiesAfter');
+require("json-circular-stringify");
 
 const DEEP_LINK = process.env.DEEP_LINK;
 
@@ -12,6 +14,27 @@ passport.use(new LocalStrategy({usernameField: 'username'}, (user, password, don
   authenticationService.login(user, password).then((accessToken) => done(null, accessToken)).catch(err => done(null, err))
 ));
 
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_REDIRECT_URL,
+    scope: [ 'profile', 'email' ],
+    state: false
+  },
+  function verify(accessToken, refreshToken, auth, profile, cb) {
+    console.log(`Profile: ${JSON.stringify(profile)} Access Token ${accessToken}, Auth: ${JSON.stringify(auth)}`)
+    cb(null, {username: 'Podria devolver token de google y depaso hago uno parecido así uso el mismo'});
+  }
+));
+
+router.get('/login/google', passport.authenticate('google'));
+
+router.get('/oauth2/redirect/google',
+  passport.authenticate('google', { session: false, failureRedirect: '/login', failureMessage: true }),
+  function(req, res) {
+    console.log(`Req: ${JSON.stringify(req)}`);
+    res.send(req.user);
+  });
 router.post('/login', passport.authenticate('local', { session: false }),
   (req, res) => {
     console.log(`User: ${req.user}`);
