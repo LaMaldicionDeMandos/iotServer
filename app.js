@@ -20,6 +20,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
-app.use('/users/me', profileRouter);
+app.use('/users/me/profile', profileRouter);
 
 module.exports = app;
