@@ -6,6 +6,7 @@ var logger = require('morgan');
 const passport = require('passport');
 
 const authRouter = require('./routes/auth');
+const profileRouter = require('./routes/profile');
 
 const USE_WHITE_LIST = process.env.USE_CORS_ORIGIN_WHITE_LIST === 'true';
 
@@ -19,5 +20,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
+app.use('/users/me', profileRouter);
 
 module.exports = app;
