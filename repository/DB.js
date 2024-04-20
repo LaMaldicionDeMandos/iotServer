@@ -19,8 +19,16 @@ const DeviceSchema = new Schema({
     roomId: {type: String, index: true}
 }, {timestamps: true});
 
+const HouseSchema = new Schema({
+    _id: String,
+    ownerId: {type: String, index: true},
+    name: String,
+    isPrimary: Boolean
+}, {timestamps: true});
+
 const User = mongoose.model('User', UserSchema);
 const Device = mongoose.model('Device', DeviceSchema);
+const House = mongoose.model('House', HouseSchema);
 
 const db = new function() {
     mongoose.connect(process.env.MONGODB_URI);
@@ -29,6 +37,7 @@ const db = new function() {
     this.ObjectId = mongoose.Types.ObjectId;
     this.User = User;
     this.Device = Device;
+    this.House = House;
 };
 
 process.on('exit', function() {
