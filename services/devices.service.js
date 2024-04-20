@@ -3,10 +3,11 @@ const _ = require('lodash');
 const repo = require('../repository/devices.repository');
 
 class DevicesService {
-    newDevice = (user, device) => {
-        console.log(`new Device: ${JSON.stringify(device)} para usuario: ${JSON.stringify(user)}`);
-        return repo.newDevice(user.id, device);
+    newDevice = (userId, device) => {
+        return repo.newDevice(userId, device);
     }
+
+    findMyDevices = (userId) => repo.findByOwnerId(userId);
 }
 
 const service = new DevicesService();
