@@ -7,11 +7,20 @@ const UserSchema = new Schema({
     _id: String,
     username: {type: String, index: true},
     password: String,
-    state: String,
+    state: { type: String, enum: ['ACTIVE', 'INACTIVE']},
     profile: {}
 }, {timestamps: true});
 
+const DeviceSchema = new Schema({
+    _id: String,
+    ownerId: {type: String, index: true},
+    type: {type: String, enum: ['switch']},
+    name: String,
+    roomId: {type: String, index: true}
+}, {timestamps: true});
+
 const User = mongoose.model('User', UserSchema);
+const Device = mongoose.model('Device', DeviceSchema);
 
 const db = new function() {
     mongoose.connect(process.env.MONGODB_URI);
@@ -19,6 +28,7 @@ const db = new function() {
     this.Schema = Schema;
     this.ObjectId = mongoose.Types.ObjectId;
     this.User = User;
+    this.Device = Device;
 };
 
 process.on('exit', function() {

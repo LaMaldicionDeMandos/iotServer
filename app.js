@@ -7,6 +7,7 @@ const passport = require('passport');
 
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
+const devicesRouter = require('./routes/devices');
 
 const USE_WHITE_LIST = process.env.USE_CORS_ORIGIN_WHITE_LIST === 'true';
 
@@ -21,5 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
 app.use('/users/me/profile', profileRouter);
+app.use('/users/me/devices', devicesRouter);
 
 module.exports = app;

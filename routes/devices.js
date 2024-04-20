@@ -2,13 +2,14 @@ const { expressjwt: jwt } = require('express-jwt');
 const express = require('express');
 const router = express.Router();
 
-const usersService = require('../services/users.service');
+const devicesService = require('../services/devices.service');
+
 const SECRET = process.env.SECRET;
 
-router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.post('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
-    usersService.getByUsername(req.auth.username)
-      .then((user) => res.send(user.profile))
+    devicesService.newDevice(req.auth, req.body)
+      .then(res.send.bind(res))
       .catch(e => res.status(500).send(e.message));
   });
 
