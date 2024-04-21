@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
 app.use('/users/me/profile', profileRouter);
-app.use('/users/me/places/houses/:houseId/devices', devicesRouter);
-app.use('/users/me/places', placesRouter);
+app.use('/users/me/houses/:houseId/devices', devicesRouter);
+app.use('/users/me/houses', placesRouter);
 
 module.exports = app;

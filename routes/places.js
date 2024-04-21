@@ -6,21 +6,21 @@ const placesService = require('../services/places.service');
 
 const SECRET = process.env.SECRET;
 
-router.post('/houses', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.post('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.newHome(req.auth.id, req.body.name)
       .then(res.status(201).send.bind(res))
       .catch(e => res.status(500).send(e.message));
   });
 
-router.get('/houses/primary', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.get('/primary', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.findMyPrimaryHouse(req.auth.id)
       .then(res.send.bind(res))
       .catch(e => res.status(500).send(e.message));
   });
 
-router.get('/houses', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.findMyHouses(req.auth.id)
       .then(res.send.bind(res))
