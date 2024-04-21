@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const usersService = require('../services/users.service');
+const placesService = require('../services/places.service');
 
 const TOKEN_EXPIRATION = process.env.TOKEN_EXPIRATION;
 const SECRET = process.env.SECRET;

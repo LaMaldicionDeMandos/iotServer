@@ -21,6 +21,10 @@ class HouseRepository {
     findOneByQuery(query) {
         return db.House.findOne(query);
     }
+
+    get DEFAULT_NAME() {
+        return 'My Home';
+    }
 }
 const repo = new HouseRepository();
 
