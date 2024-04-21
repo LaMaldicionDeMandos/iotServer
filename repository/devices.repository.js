@@ -18,6 +18,10 @@ class DeviceRepository {
     findByOwnerId(id) {
         return db.Device.find({ownerId: id});
     }
+
+    findByOwnerIdAndHouseId(ownerId, houseId) {
+        return db.Device.find({ownerId, houseId});
+    }
 }
 const repo = new DeviceRepository();
 
