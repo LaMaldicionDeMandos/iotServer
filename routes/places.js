@@ -9,7 +9,7 @@ const SECRET = process.env.SECRET;
 router.post('/houses', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.newHome(req.auth.id, req.body.name)
-      .then(res.send.bind(res))
+      .then(res.status(201).send.bind(res))
       .catch(e => res.status(500).send(e.message));
   });
 

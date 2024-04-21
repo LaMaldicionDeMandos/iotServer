@@ -14,6 +14,10 @@ class HouseRepository {
         return (await homeDTO.save()).toJSON();
     }
 
+    exists(id) {
+        return db.House.exists({_id: id});
+    }
+
     findByOwnerId(id) {
         return db.House.find({ownerId: id});
     }

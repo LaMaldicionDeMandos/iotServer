@@ -9,7 +9,7 @@ const SECRET = process.env.SECRET;
 router.post('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     devicesService.newDevice(req.auth.id, req.body)
-      .then(res.send.bind(res))
+      .then(res.status(201).send.bind(res))
       .catch(e => res.status(500).send(e.message));
   });
 

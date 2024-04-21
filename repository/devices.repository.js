@@ -10,6 +10,7 @@ class DeviceRepository {
         deviceDTO.ownerId = ownerId;
         deviceDTO.type = device.type;
         deviceDTO.name = device.name;
+        deviceDTO.houseId = device.houseId;
         deviceDTO.roomId = device.roomId;
         return (await deviceDTO.save()).toJSON();
     }

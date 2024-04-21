@@ -16,7 +16,8 @@ const DeviceSchema = new Schema({
     ownerId: {type: String, index: true},
     type: {type: String, enum: ['switch']},
     name: String,
-    roomId: {type: String, index: true}
+    houseId: {type: String, index: true},
+    roomId: String
 }, {timestamps: true});
 
 const HouseSchema = new Schema({
