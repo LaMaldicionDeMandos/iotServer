@@ -5,7 +5,7 @@ const houseRepo = require('../repository/houses.repository');
 
 class DevicesService {
     newDevice = async (ownerId, houseId, device) => {
-        const existsHouse = await houseRepo.exists(houseId);
+        const existsHouse = await houseRepo.exists(ownerId, houseId);
         if (!existsHouse) {
             console.log('Do not contains house');
             const house = await houseRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});

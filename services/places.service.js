@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const housesRepo = require('../repository/houses.repository');
+const roomsRepo = require('../repository/rooms.repository');
 
 class PlacesService {
     newHome = (ownerId, name) => {
@@ -17,6 +18,15 @@ class PlacesService {
 
     findMyPrimaryHouse = (ownerId) => housesRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});
     findMyHouses = (ownerId) => housesRepo.findByOwnerId(ownerId);
+
+    newRoom = async (ownerId, houseId, name) => {
+        const existHouse = await housesRepo.exists(ownerId, houseId);
+        return existHouse ? roomsRepo.newRoom(ownerId, houseId,name) : Promise.reject({message: 'User or house not exists'});
+    }
+
+    getRooms = (ownerId, houseId) => {
+        return roomsRepo.findByQuery({ownerId, houseId});
+    }
 }
 
 const service = new PlacesService();

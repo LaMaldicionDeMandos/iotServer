@@ -24,8 +24,8 @@ class HouseRepository {
         return result.deletedCount === 1;
     }
 
-    exists(id) {
-        return db.House.exists({_id: id});
+    exists(ownerId, id) {
+        return db.House.exists({_id: id, ownerId: ownerId});
     }
 
     findByOwnerId(id) {

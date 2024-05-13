@@ -47,4 +47,18 @@ router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.post('/:id/rooms', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.newRoom(req.auth.id, req.params.id, req.body.name)
+      .then(res.status(201).send.bind(res))
+      .catch(e => res.status(400).send(e.message));
+  });
+
+router.get('/:id/rooms', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.getRooms(req.auth.id, req.params.id)
+      .then(res.send.bind(res))
+      .catch(e => res.status(500).send(e.message));
+  });
+
 module.exports = router;
