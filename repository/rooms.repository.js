@@ -16,6 +16,11 @@ class RoomsRepository {
     findByQuery(query) {
         return db.Room.find(query);
     }
+
+    async updateOneByQuery(query, delta) {
+        await db.Room.updateOne(query, delta);
+        return db.Room.findOne(query);
+    }
 }
 const repo = new RoomsRepository();
 

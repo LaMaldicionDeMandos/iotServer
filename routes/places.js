@@ -61,4 +61,14 @@ router.get('/:id/rooms', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.put('/:id/rooms/:roomId', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.changeRoomName(req.auth.id, req.params.roomId, req.body.name)
+      .then((room) => {
+        if (room) res.send(room);
+        else res.status(404).send({message: `Room ${req.params.roomId} not found`});
+      })
+      .catch(e => res.status(500).send(e.message));
+  });
+
 module.exports = router;

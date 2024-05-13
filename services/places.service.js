@@ -27,6 +27,10 @@ class PlacesService {
     getRooms = (ownerId, houseId) => {
         return roomsRepo.findByQuery({ownerId, houseId});
     }
+
+    changeRoomName = (ownerId, id, newName) => {
+        return roomsRepo.updateOneByQuery({_id: id, ownerId: ownerId}, {name: newName});
+    }
 }
 
 const service = new PlacesService();
