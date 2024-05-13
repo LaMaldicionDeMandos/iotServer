@@ -21,6 +21,11 @@ class RoomsRepository {
         await db.Room.updateOne(query, delta);
         return db.Room.findOne(query);
     }
+
+    async deleteOneByQuery(query) {
+        const result = await db.Room.deleteOne(query);
+        return result.deletedCount === 1;
+    }
 }
 const repo = new RoomsRepository();
 
