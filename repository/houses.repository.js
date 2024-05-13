@@ -14,6 +14,11 @@ class HouseRepository {
         return (await homeDTO.save()).toJSON();
     }
 
+    async updateOneByQuery(query, delta) {
+        await db.House.updateOne(query, delta);
+        return db.House.findOne(query);
+    }
+
     exists(id) {
         return db.House.exists({_id: id});
     }

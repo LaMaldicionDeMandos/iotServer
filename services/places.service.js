@@ -7,6 +7,10 @@ class PlacesService {
         return housesRepo.newHome(ownerId, name);
     }
 
+    changeHouseName = (ownerId, id, newName) => {
+        return housesRepo.updateOneByQuery({_id: id, ownerId: ownerId}, {name: newName});
+    }
+
     findMyPrimaryHouse = (ownerId) => housesRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});
     findMyHouses = (ownerId) => housesRepo.findByOwnerId(ownerId);
 }

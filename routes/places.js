@@ -20,6 +20,16 @@ router.get('/primary', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.put('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.changeHouseName(req.auth.id, req.params.id, req.body.name)
+      .then((house) => {
+        if (house) res.send(house);
+        else res.status(404).send({message: `House ${req.params.id} not found`});
+      })
+      .catch(e => res.status(500).send(e.message));
+  });
+
 router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.findMyHouses(req.auth.id)
