@@ -19,6 +19,11 @@ class HouseRepository {
         return db.House.findOne(query);
     }
 
+    async deleteOneByQuery(query) {
+        const result = await db.House.deleteOne(query);
+        return result.deletedCount === 1;
+    }
+
     exists(id) {
         return db.House.exists({_id: id});
     }

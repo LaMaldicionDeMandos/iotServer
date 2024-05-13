@@ -30,6 +30,16 @@ router.put('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.delete('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.deleteHouse(req.auth.id, req.params.id)
+      .then((ok) => {
+        if (ok) res.status(204).send();
+        else res.status(400).send({message: `House ${req.params.id} is primary house ${ok}`});
+      })
+      .catch(e => res.status(500).send(e.message));
+  });
+
 router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.findMyHouses(req.auth.id)

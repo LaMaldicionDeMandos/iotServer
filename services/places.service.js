@@ -11,6 +11,10 @@ class PlacesService {
         return housesRepo.updateOneByQuery({_id: id, ownerId: ownerId}, {name: newName});
     }
 
+    deleteHouse = (ownerId, id) => {
+        return housesRepo.deleteOneByQuery({_id: id, ownerId: ownerId, isPrimary: false});
+    }
+
     findMyPrimaryHouse = (ownerId) => housesRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});
     findMyHouses = (ownerId) => housesRepo.findByOwnerId(ownerId);
 }
