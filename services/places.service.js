@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const housesRepo = require('../repository/houses.repository');
 const roomsRepo = require('../repository/rooms.repository');
+const devicesRepo = require('../repository/devices.repository');
 
 class PlacesService {
     newHome = (ownerId, name) => {
@@ -29,7 +30,12 @@ class PlacesService {
     }
 
     changeRoomName = (ownerId, id, newName) => {
-        return roomsRepo.updateOneByQuery({_id: id, ownerId: ownerId}, {name: newName});
+        return roomsRepo.updateOneByQuery({_id: id, ownerId}, {name: newName});
+    }
+
+    deleteRoom = async (ownerId, id) => {
+        await devicesRepo.updateByQuery({ownerId, roomId: id}, {$unset: {roomId: 1}});
+        return roomsRepo.deleteOneByQuery({ownerId, _id: id});
     }
 }
 

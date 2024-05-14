@@ -22,6 +22,11 @@ class DeviceRepository {
     findByOwnerIdAndHouseId(ownerId, houseId) {
         return db.Device.find({ownerId, houseId});
     }
+
+    async updateByQuery(query, delta) {
+        await db.Device.updateMany(query, delta);
+        return db.Device.find(query);
+    }
 }
 const repo = new DeviceRepository();
 

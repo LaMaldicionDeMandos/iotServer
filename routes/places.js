@@ -71,4 +71,14 @@ router.put('/:id/rooms/:roomId', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.delete('/:id/rooms/:roomId', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    placesService.deleteRoom(req.auth.id, req.params.roomId)
+      .then((ok) => {
+        if (ok) res.status(204).send();
+        else res.status(400).send({message: `Room ${req.params.roomId} cant be deleted`});
+      })
+      .catch(e => res.status(500).send(e.message));
+  });
+
 module.exports = router;
