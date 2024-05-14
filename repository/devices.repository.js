@@ -27,6 +27,11 @@ class DeviceRepository {
         await db.Device.updateMany(query, delta);
         return db.Device.find(query);
     }
+
+    async deleteOneByQuery(query) {
+        const result = await db.Device.deleteOne(query);
+        return result.deletedCount === 1;
+    }
 }
 const repo = new DeviceRepository();
 

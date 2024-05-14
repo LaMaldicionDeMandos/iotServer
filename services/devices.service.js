@@ -25,6 +25,10 @@ class DevicesService {
         return repo.updateByQuery({ownerId, _id: id}, delta);
     }
 
+    deleteDevice = async (ownerId, id) => {
+        return repo.deleteOneByQuery({ownerId, _id: id});
+    }
+
 }
 
 const service = new DevicesService();
