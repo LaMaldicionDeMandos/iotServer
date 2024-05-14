@@ -13,6 +13,10 @@ class RoomsRepository {
         return (await roomDTO.save()).toJSON();
     }
 
+    exists(ownerId, id) {
+        return db.Room.exists({_id: id, ownerId: ownerId});
+    }
+
     findByQuery(query) {
         return db.Room.find(query);
     }
