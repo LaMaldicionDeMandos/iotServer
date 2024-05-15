@@ -3,17 +3,19 @@ const _ = require('lodash');
 const repo = require('../repository/user.repository');
 const houseRepo = require('../repository/houses.repository');
 const emailService = require('./email.service');
-
-const VALIDATION_URL = process.env.HOST + '/auth/validation';
+const passwordGenerator = require('generate-password');
 
 class UsersService {
     register = async (user) => {
+        const code = passwordGenerator.generate({length: 6, lowercase: false, uppercase: false, numbers: true});
         let newUser = _.assign(user, {
-            password: sha(user.password)
+            password: sha(user.password),
+            validationCode: code
         });
+
         newUser = await repo.newUser(newUser);
         await this.#createHome(newUser._id);
-        this.#sendUserCodeToValidate(newUser);
+        await this.#sendUserCodeToValidate(newUser);
         return newUser;
     }
 
@@ -36,12 +38,17 @@ class UsersService {
         return repo.findUserByUsername(username);
     }
 
-    activeUser = (username) => {
-        return repo.update(username, {state: repo.ACTIVE });
+    verifyUser = async (username, code) => {
+        if (await repo.existsUserByQuery({username, validationCode: code})) {
+            await repo.update(username, {state: repo.ACTIVE, $unset: {validationCode: 1}});
+            return repo.findUserByUsername(username);
+        } else {
+            return Promise.reject({message: 'Invalid validation'});
+        }
     }
 
     #sendUserCodeToValidate(user) {
-        emailService.sendRegistrationValidate(`${VALIDATION_URL}/${user._id}`, user.username, user.profile.first_name);
+        emailService.sendRegistrationValidate(user.validationCode, user.username, user.profile.first_name);
     }
 
     #createHome(userId) {

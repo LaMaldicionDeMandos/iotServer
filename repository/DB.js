@@ -8,7 +8,8 @@ const UserSchema = new Schema({
     username: {type: String, index: true},
     password: String,
     state: { type: String, enum: ['ACTIVE', 'INACTIVE']},
-    profile: {}
+    validationCode: String,
+    profile: {},
 }, {timestamps: true});
 
 const DeviceSchema = new Schema({

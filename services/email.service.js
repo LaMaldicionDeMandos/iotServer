@@ -27,9 +27,9 @@ createRequest = (templateId, email, subject, variables, name) => {
 };
 
 class MailService {
-    sendRegistrationValidate(url, email, firstName) {
+    sendRegistrationValidate(code, email, firstName) {
         const request = createRequest(5884527, email, "Validación de email",
-            {"name": firstName, "confirmation_link": url},
+            {"name": firstName, "validation_code": code},
             firstName);
         return mailjet.post("send", MAILJET_API_VERSION)
             .request(request)

@@ -60,17 +60,15 @@ router.post('/register',
       .catch(e => res.status(500).send(e.message));
   });
 
-router.get('/validation/:user_id', (req, res) => {
-    usersService.getById(req.params.user_id)
-      .then(async (user) => {
-        if (user && user.state == 'INACTIVE') {
-          await usersService.activeUser(user.username);
-        }
-        console.log("Pasó?");
-        res.redirect(DEEP_LINK);
+router.post('/validation/:username',
+  [keepPropertiesAfter('_id,username,profile')],
+  (req, res) => {
+    usersService.verifyUser(req.params.username, req.body.validation_code)
+      .then((user) => {
+        res.status(201).send(user);
       }).catch((e) => {
         console.log("APA tiró un error " + e.toString());
-        res.redirect(DEEP_LINK);
+        res.status(400).send({message: 'Invalid validation'});
     });
   });
 module.exports = router;

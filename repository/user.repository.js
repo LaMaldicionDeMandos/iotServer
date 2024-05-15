@@ -13,7 +13,12 @@ class UserRepository {
         userDTO.password = user.password;
         userDTO.profile = user.profile;
         userDTO.state = user.state || 'INACTIVE';
+        userDTO.validationCode = user.validationCode;
         return (await userDTO.save()).toJSON();
+    }
+
+    existsUserByQuery(query) {
+        return db.User.exists(query);
     }
 
     findUserByUsername(username) {
