@@ -19,6 +19,15 @@ class UsersService {
         return newUser;
     }
 
+    changePassword = async (username, validationCode, password) => {
+       if (await repo.existsPasswordRecoveryCode(username, validationCode)) {
+           await repo.update(username, {password: sha(password)});
+           return repo.findUserByUsername(username);
+       } else {
+           return Promise.reject({message: 'invalid password recovery'});
+       }
+    }
+
     registerWithoutPassword = async (username, profile) => {
         console.log(`Profile: ${JSON.stringify(profile)}`);
         const user = await repo.newUser({username, profile: _.pick(profile, ['displayName', 'provider']), state: repo.ACTIVE});
@@ -42,6 +51,18 @@ class UsersService {
         if (await repo.existsUserByQuery({username, validationCode: code})) {
             await repo.update(username, {state: repo.ACTIVE, $unset: {validationCode: 1}});
             return repo.findUserByUsername(username);
+        } else {
+            return Promise.reject({message: 'Invalid validation'});
+        }
+    }
+
+    passwordRecovery = async (username) => {
+        const code = passwordGenerator.generate({length: 6, lowercase: false, uppercase: false, numbers: true});
+        if (await repo.existsUserByQuery({username})) {
+            await repo.newPasswordRecovery(username, code);
+            const user = await repo.findUserByUsername(username);
+            await emailService.sendPasswordRecoveryCode(code, username, user.profile.first_name);
+            return user;
         } else {
             return Promise.reject({message: 'Invalid validation'});
         }

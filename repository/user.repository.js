@@ -17,6 +17,18 @@ class UserRepository {
         return (await userDTO.save()).toJSON();
     }
 
+    async newPasswordRecovery(username, code) {
+        const passwordRecovery = new db.PasswordRecovery();
+        passwordRecovery._id = new db.ObjectId();
+        passwordRecovery.username = username;
+        passwordRecovery.code = code;
+        return (await passwordRecovery.save()).toJSON();
+    }
+
+    existsPasswordRecoveryCode(username, code) {
+        return db.PasswordRecovery.exists({username, code});
+    }
+
     existsUserByQuery(query) {
         return db.User.exists(query);
     }

@@ -60,7 +60,7 @@ router.post('/register',
       .catch(e => res.status(500).send(e.message));
   });
 
-router.post('/validation/:username',
+router.post('/:username/validation',
   [keepPropertiesAfter('_id,username,profile')],
   (req, res) => {
     usersService.verifyUser(req.params.username, req.body.validation_code)
@@ -69,6 +69,30 @@ router.post('/validation/:username',
       }).catch((e) => {
         console.log("APA tiró un error " + e.toString());
         res.status(400).send({message: 'Invalid validation'});
+    });
+  });
+
+router.post('/:username/password-recovery',
+  [keepPropertiesAfter('_id,username,profile')],
+  (req, res) => {
+    usersService.passwordRecovery(req.params.username)
+      .then((user) => {
+        res.status(201).send(user);
+      }).catch((e) => {
+      console.log("APA tiró un error " + e.toString());
+      res.status(400).send({message: 'Invalid validation'});
+    });
+  });
+
+router.put('/:username/password',
+  [keepPropertiesAfter('_id,username,profile')],
+  (req, res) => {
+    usersService.changePassword(req.params.username, req.body.validation_code, req.body.password)
+      .then((user) => {
+        res.status(201).send(user);
+      }).catch((e) => {
+      console.log("APA tiró un error " + e.toString());
+      res.status(400).send({message: 'Invalid validation'});
     });
   });
 module.exports = router;

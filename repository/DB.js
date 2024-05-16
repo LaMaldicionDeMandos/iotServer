@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 console.log('Connect to ' + process.env.MONGODB_URI);
+const PasswordRecoverySchema = new Schema({
+    _id: String,
+    username: {type: String, index: true},
+    code: String,
+}, {timestamps: true});
+
+PasswordRecoverySchema.index({ createdAt: 1 }, { expireAfterSeconds: 60*5 });
+
 const UserSchema = new Schema({
     _id: String,
     username: {type: String, index: true},
@@ -10,6 +18,7 @@ const UserSchema = new Schema({
     state: { type: String, enum: ['ACTIVE', 'INACTIVE']},
     validationCode: String,
     profile: {},
+    passwordRecoveryCode: String
 }, {timestamps: true});
 
 const DeviceSchema = new Schema({
@@ -35,6 +44,7 @@ const RoomSchema = new Schema({
     name: String,
 }, {timestamps: true});
 
+const PasswordRecovery = mongoose.model('PasswordRecovery', PasswordRecoverySchema);
 const User = mongoose.model('User', UserSchema);
 const Device = mongoose.model('Device', DeviceSchema);
 const House = mongoose.model('House', HouseSchema);
@@ -45,6 +55,7 @@ const db = new function() {
     this.mongoose = mongoose;
     this.Schema = Schema;
     this.ObjectId = mongoose.Types.ObjectId;
+    this.PasswordRecovery = PasswordRecovery;
     this.User = User;
     this.Device = Device;
     this.House = House;
