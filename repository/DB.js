@@ -44,11 +44,34 @@ const RoomSchema = new Schema({
     name: String,
 }, {timestamps: true});
 
+const SceneConditionSchema = new Schema({
+   type: {type: String, enum: ['touch', 'device_state']},
+   deviceId: String,
+   state: String
+});
+
+const SceneActionSchema = new Schema({
+    type: {type: String, enum: ['device', 'wait']},
+    deviceId: String,
+    state: String,
+    time: String
+});
+
+const SceneSchema = new Schema({
+    _id: String,
+    ownerId: {type: String, index: true},
+    houseId: String,
+    name: String,
+    condition: SceneConditionSchema,
+    actions: [SceneActionSchema]
+}, {timestamps: true});
+
 const PasswordRecovery = mongoose.model('PasswordRecovery', PasswordRecoverySchema);
 const User = mongoose.model('User', UserSchema);
 const Device = mongoose.model('Device', DeviceSchema);
 const House = mongoose.model('House', HouseSchema);
 const Room = mongoose.model('Room', RoomSchema);
+const Scene = mongoose.model('Scene', SceneSchema);
 
 const db = new function() {
     mongoose.connect(process.env.MONGODB_URI);
@@ -60,6 +83,7 @@ const db = new function() {
     this.Device = Device;
     this.House = House;
     this.Room = Room;
+    this.Scene = Scene;
 };
 
 process.on('exit', function() {
