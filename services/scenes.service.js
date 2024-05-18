@@ -1,3 +1,5 @@
+const TouchScene = require('../model/scene');
+
 const repo = require('../repository/scenes.repository');
 const houseRepo = require('../repository/houses.repository');
 
@@ -23,6 +25,11 @@ class ScenesService {
     findMyScenes = (ownerId, houseId) => repo.findByOwnerIdAndHouseId(ownerId, houseId);
 
     deleteScene = (ownerId, sceneId) => repo.deleteScene(ownerId, sceneId);
+
+    activateScene = async (ownerId, sceneId) => {
+        const scene = new TouchScene(await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId));
+        scene.touch();
+    }
 }
 
 const service = new ScenesService();

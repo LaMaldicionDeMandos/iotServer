@@ -40,4 +40,11 @@ router.delete('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.post('/:id/touch', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    scenesService.activateScene(req.auth.id, req.params.id, 'touch')
+      .then(res.status(201).send.bind(res))
+      .catch(e => res.status(500).send(e.message));
+  });
+
 module.exports = router;
