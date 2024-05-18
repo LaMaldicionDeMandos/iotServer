@@ -21,6 +21,8 @@ class ScenesService {
     }
 
     findMyScenes = (ownerId, houseId) => repo.findByOwnerIdAndHouseId(ownerId, houseId);
+
+    deleteScene = (ownerId, sceneId) => repo.deleteScene(ownerId, sceneId);
 }
 
 const service = new ScenesService();

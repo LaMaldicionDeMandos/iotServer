@@ -31,6 +31,14 @@ class SceneRepository {
     findByOwnerIdAndHouseId(ownerId, houseId) {
         return db.Scene.find({ownerId, houseId});
     }
+
+    deleteScene = (ownerId, _id) => this.#deleteOneByQuery({ownerId, _id});
+
+
+    async #deleteOneByQuery(query) {
+        const result = await db.Scene.deleteOne(query);
+        return result.deletedCount === 1;
+    }
 }
 const repo = new SceneRepository();
 
