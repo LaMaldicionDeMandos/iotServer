@@ -15,6 +15,15 @@ class SceneRepository {
         return (await sceneDTO.save()).toJSON();
     }
 
+    exists(ownerId, id) {
+        return db.Scene.exists({_id: id, ownerId: ownerId});
+    }
+
+    async update(model) {
+        await db.Scene.updateOne({_id: model._id}, model);
+        return db.Scene.findOne({_id: model._id});
+    }
+
     findByOwnerId(id) {
         return db.Scene.find({ownerId: id});
     }

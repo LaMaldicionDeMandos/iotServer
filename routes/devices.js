@@ -15,7 +15,7 @@ router.post('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
-router.put('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.patch('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     devicesService.updateDevice(req.auth.id, req.params.id, _.pick(req.body, ['name', 'roomId']))
       .then(res.status(200).send.bind(res))

@@ -13,6 +13,13 @@ class ScenesService {
         return repo.newScene(ownerId, scene);
     }
 
+    updateScene = async (ownerId, scene) => {
+        if (ownerId !== scene.ownerId || !(await repo.exists(ownerId, scene._id))) return Promise.reject({message: 'Scene not exists'});
+        else {
+            return repo.update(scene);
+        }
+    }
+
     findMyScenes = (ownerId, houseId) => repo.findByOwnerIdAndHouseId(ownerId, houseId);
 }
 

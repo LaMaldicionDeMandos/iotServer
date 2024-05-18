@@ -20,7 +20,7 @@ router.get('/primary', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
-router.put('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.patch('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.changeHouseName(req.auth.id, req.params.id, req.body.name)
       .then((house) => {
@@ -61,7 +61,7 @@ router.get('/:id/rooms', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
-router.put('/:id/rooms/:roomId', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+router.patch('/:id/rooms/:roomId', jwt({ secret: SECRET, algorithms: ['HS256'] }),
   async (req, res) => {
     placesService.changeRoomName(req.auth.id, req.params.roomId, req.body.name)
       .then((room) => {

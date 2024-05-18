@@ -23,4 +23,11 @@ router.get('', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.put('/:id', jwt({ secret: SECRET, algorithms: ['HS256'] }),
+  async (req, res) => {
+    scenesService.updateScene(req.auth.id, req.body)
+      .then(res.status(200).send.bind(res))
+      .catch(e => res.status(500).send(e.message));
+  });
+
 module.exports = router;
