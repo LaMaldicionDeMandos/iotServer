@@ -3,6 +3,8 @@ const TouchScene = require('../model/scene');
 const repo = require('../repository/scenes.repository');
 const houseRepo = require('../repository/houses.repository');
 
+const mqttMessageService = require('./mqtt-message.service');
+
 class ScenesService {
     newScene = async (ownerId, houseId, scene) => {
         const existsHouse = await houseRepo.exists(ownerId, houseId);
@@ -28,7 +30,8 @@ class ScenesService {
 
     activateScene = async (ownerId, sceneId) => {
         const scene = new TouchScene(await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId));
-        scene.touch();
+        scene.touch(mqttMessageService);
+        return scene;
     }
 }
 
