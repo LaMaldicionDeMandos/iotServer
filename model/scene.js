@@ -1,4 +1,5 @@
 const PromiseTimers = require('promise-timers');
+const parseDuration = require('parse-duration');
 class TouchScene {
   constructor(model) {
     this._id = model._id;
@@ -21,12 +22,12 @@ class TouchScene {
       mqttMessageService.sendMessage(this.ownerId, action.deviceId, action.state).then(() => {});
       return Promise.resolve(action);
     } else if (action.type === 'wait') {
-      return PromiseTimers.setTimeout(this.#calculateTime(action.time), action.time).then((args) => console.log(`Wait for ${JSON.stringify(args)}`));
+      return PromiseTimers.setTimeout(this.#calculateTime(action.time), action.time).then((delay) => console.log(`Wait for ${delay} milliseconds`));
     }
   }
 
   #calculateTime = (actionTime) => {
-    return 10*1000;
+    return parseDuration(actionTime, 'ms');
   }
 }
 
