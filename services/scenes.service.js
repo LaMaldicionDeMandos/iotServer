@@ -1,4 +1,4 @@
-const TouchScene = require('../model/scene');
+const Scene = require('../model/scene');
 
 const repo = require('../repository/scenes.repository');
 const houseRepo = require('../repository/houses.repository');
@@ -29,10 +29,16 @@ class ScenesService {
     deleteScene = (ownerId, sceneId) => repo.deleteScene(ownerId, sceneId);
 
     activateScene = async (ownerId, sceneId) => {
-        const scene = new TouchScene(await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId));
-        scene.touch(mqttMessageService);
+        const scene = new Scene(await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId));
+        scene.activate(mqttMessageService);
         return scene;
     }
+
+    findDeviceStateScenes = (deviceId, state) => repo.findByQuery({
+        "condition.type": 'device_state',
+        "condition.deviceId": deviceId,
+        "condition.state": state
+    });
 }
 
 const service = new ScenesService();

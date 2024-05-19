@@ -1,6 +1,6 @@
 const PromiseTimers = require('promise-timers');
 const parseDuration = require('parse-duration');
-class TouchScene {
+class Scene {
   constructor(model) {
     this._id = model._id;
     this.ownerId = model.ownerId;
@@ -9,9 +9,8 @@ class TouchScene {
     this.actions = model.actions;
   }
 
-  touch(mqttMessageService) {
-    console.log(`Aplique touch a la escena ${this.name}`);
-    let c = 0;
+  activate(mqttMessageService) {
+    console.log(`Activo a la escena ${this.name}`);
     this.actions.reduce((task, action) => {
       return task.then(() => this.#createTask(action, mqttMessageService));
     }, Promise.resolve());
@@ -31,4 +30,4 @@ class TouchScene {
   }
 }
 
-module.exports = TouchScene;
+module.exports = Scene;

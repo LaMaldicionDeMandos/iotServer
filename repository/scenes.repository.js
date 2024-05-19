@@ -28,6 +28,10 @@ class SceneRepository {
         return db.Scene.find({ownerId: id});
     }
 
+    findByQuery(query) {
+        return db.Scene.find(query);
+    }
+
     findByOwnerIdAndHouseId(ownerId, houseId) {
         return db.Scene.find({ownerId, houseId});
     }

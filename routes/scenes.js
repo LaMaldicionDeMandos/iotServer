@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 
 const scenesService = require('../services/scenes.service');
+const changeStatusListener = require('../services/change-status-listener');
 
 const _ = require('lodash');
 
@@ -47,5 +48,11 @@ router.post('/:id/touch', jwt({ secret: SECRET, algorithms: ['HS256'] }),
       .catch(e => res.status(500).send(e.message));
   });
 
+router.post('/mock-change-state',
+  async (req, res) => {
+    changeStatusListener.changeDeviceStatus(req.body.deviceId, req.body.status)
+      .then(res.status(201).send.bind(res))
+      .catch(e => res.status(500).send(e.message));
+  });
 
 module.exports = router;
