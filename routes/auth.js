@@ -57,7 +57,10 @@ router.post('/register',
   (req, res) => {
   usersService.register(req.body)
       .then((user) => res.status(201).send(user))
-      .catch(e => res.status(500).send(e.message));
+      .catch(e => {
+        const code = (e.message == 'invalid email' || e.message == 'invalid password') ? 400 : 500;
+          res.status(code).send(e.message)
+      });
   });
 
 router.post('/:username/validation',

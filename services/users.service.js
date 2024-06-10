@@ -4,9 +4,16 @@ const repo = require('../repository/user.repository');
 const houseRepo = require('../repository/houses.repository');
 const emailService = require('./email.service');
 const passwordGenerator = require('generate-password');
+const emailValidator = require("email-validator");
+const PasswordValidator = require('password-validator');
 
+const passwordSchema = new PasswordValidator()
+  .is().min(8)
+  .has().digits(1);
 class UsersService {
     register = async (user) => {
+        if (!emailValidator.validate(user.username)) return Promise.reject({message: 'invalid email'});
+        if (!passwordSchema.validate(user.password)) return Promise.reject({message: 'invalid password'});
         const code = passwordGenerator.generate({length: 6, lowercase: false, uppercase: false, numbers: true});
         let newUser = _.assign(user, {
             password: sha(user.password),
