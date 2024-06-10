@@ -29,6 +29,10 @@ class UserRepository {
         return db.PasswordRecovery.exists({username, code});
     }
 
+    getPasswordRecoveryCode(username) {
+        return db.PasswordRecovery.findOne({username: username});
+    }
+
     existsUserByQuery(query) {
         return db.User.exists(query);
     }

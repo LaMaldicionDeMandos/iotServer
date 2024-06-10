@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const expireAfterSeconds = 60*30;
+
 const Schema = mongoose.Schema;
 
 console.log('Connect to ' + process.env.MONGODB_URI);
@@ -9,7 +11,7 @@ const PasswordRecoverySchema = new Schema({
     code: String,
 }, {timestamps: true});
 
-PasswordRecoverySchema.index({ createdAt: 1 }, { expireAfterSeconds: 60*5 });
+PasswordRecoverySchema.index({ createdAt: 1 }, { expireAfterSeconds: expireAfterSeconds });
 
 const UserSchema = new Schema({
     _id: String,

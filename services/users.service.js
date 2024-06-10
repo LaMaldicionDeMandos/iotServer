@@ -63,6 +63,22 @@ class UsersService {
         }
     }
 
+    resendValidationCode = async (username) => {
+        const user = await repo.findUserByUsername(username);
+        if (user && user.validationCode) {
+            await emailService.sendPasswordRecoveryCode(user.validationCode, username, user.profile.first_name);
+            return true;
+        } else {
+            const register = await repo.getPasswordRecoveryCode(username);
+            console.log(`Tiene codigo? ${register}`);
+            if (register) {
+                await emailService.sendPasswordRecoveryCode(register.code, username, user.profile.first_name);
+                return true;
+            }
+        }
+        return Promise.reject();
+    }
+
     passwordRecovery = async (username) => {
         const code = passwordGenerator.generate({length: 6, lowercase: false, uppercase: false, numbers: true});
         if (await repo.existsUserByQuery({username})) {

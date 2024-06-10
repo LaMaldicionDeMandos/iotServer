@@ -75,6 +75,16 @@ router.post('/:username/validation',
     });
   });
 
+router.post('/:username/validation/resend',
+  (req, res) => {
+    usersService.resendValidationCode(req.params.username)
+      .then((success) => {
+        res.status(201).send({ok: 'ok'});
+      }).catch((e) => {
+      res.status(400).send({message: 'Code not found'});
+    });
+  });
+
 router.post('/:username/password-recovery',
   [keepPropertiesAfter('_id,username,profile')],
   (req, res) => {
