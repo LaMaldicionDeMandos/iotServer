@@ -28,4 +28,6 @@ app.use('/users/me/houses/:houseId/devices', devicesRouter);
 app.use('/users/me/houses/:houseId/scenes', scenesRouter);
 app.use('/users/me/houses', placesRouter);
 
+
+
 module.exports = app;
