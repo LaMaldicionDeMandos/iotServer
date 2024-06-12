@@ -40,9 +40,8 @@ class ScenesService {
     deleteScene = (ownerId, sceneId) => repo.deleteScene(ownerId, sceneId);
 
     activateScene = async (ownerId, sceneId) => {
-        const scene = new Scene(await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId));
-        scene.activate(mqttMessageService);
-        return scene;
+        const scene = await repo.findOneByOwnerIdAndSceneId(ownerId, sceneId);
+        return this.#activateScene(scene);
     }
 
     findDeviceStateScenes = (deviceId, state) => repo.findByQuery({
@@ -50,6 +49,12 @@ class ScenesService {
         "condition.deviceId": deviceId,
         "condition.state": state
     });
+
+    #activateScene(sceneEntity) {
+        const scene = new Scene(sceneEntity);
+        scene.activate(mqttMessageService);
+        return scene;
+    }
 
     #findScenesThatHasDeviceAsCondition(ownerId, deviceId, state) {
         return repo.findByQuery({
@@ -61,10 +66,10 @@ class ScenesService {
     }
 
     #onChangeState = async (ownerId, deviceId, state) => {
-        console.log(`Change state of: {owner: ${ownerId}, deviceId: ${deviceId}, state: ${state}}`);
         const scenes = await this.#findScenesThatHasDeviceAsCondition(ownerId, deviceId, state);
         scenes.forEach(scene => {
            console.log(`Scene: ${scene.name}`);
+           this.#activateScene(scene);
         });
     }
 }

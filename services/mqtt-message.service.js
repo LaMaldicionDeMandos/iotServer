@@ -30,8 +30,9 @@ class MqttMessageService {
   }
 
   sendMessage(clientId, deviceId, message) {
-    console.log(`Sending Message to MQTT Broker: /client/${clientId}/deviceId/${deviceId}?message=${message}`);
-    this.#client.publish(`/iotProject/${clientId}/device/${deviceId}/set`, message);
+    const topic = `/iotProject/${clientId}/device/${deviceId}/set`;
+    console.log(`Sending Message to MQTT Broker: ${topic}?message=${message}`);
+    this.#client.publish(topic, message);
     return Promise.resolve({clientId, deviceId, message});
   }
 

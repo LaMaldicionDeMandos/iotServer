@@ -10,7 +10,7 @@ class Scene {
   }
 
   activate(mqttMessageService) {
-    console.log(`Activo a la escena ${this.name}`);
+    console.log(`Activo la escena ${this.name}`);
     this.actions.reduce((task, action) => {
       return task.then(() => this.#createTask(action, mqttMessageService));
     }, Promise.resolve());
