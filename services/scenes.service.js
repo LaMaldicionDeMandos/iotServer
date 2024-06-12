@@ -51,8 +51,21 @@ class ScenesService {
         "condition.state": state
     });
 
-    #onChangeState = (ownerId, deviceId, state) => {
+    #findScenesThatHasDeviceAsCondition(ownerId, deviceId, state) {
+        return repo.findByQuery({
+            ownerId,
+            'condition.type': 'device_state',
+            'condition.deviceId': deviceId,
+            'condition.state': state
+        });
+    }
+
+    #onChangeState = async (ownerId, deviceId, state) => {
         console.log(`Change state of: {owner: ${ownerId}, deviceId: ${deviceId}, state: ${state}}`);
+        const scenes = await this.#findScenesThatHasDeviceAsCondition(ownerId, deviceId, state);
+        scenes.forEach(scene => {
+           console.log(`Scene: ${scene.name}`);
+        });
     }
 }
 
