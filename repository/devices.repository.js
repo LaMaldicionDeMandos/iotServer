@@ -23,6 +23,10 @@ class DeviceRepository {
         return db.Device.find({ownerId, houseId});
     }
 
+    findAll() {
+        return db.Device.find();
+    }
+
     async updateByQuery(query, delta) {
         await db.Device.updateMany(query, delta);
         return db.Device.find(query);

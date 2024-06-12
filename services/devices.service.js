@@ -29,6 +29,8 @@ class DevicesService {
         return repo.deleteOneByQuery({ownerId, _id: id});
     }
 
+    findAll = () => repo.findAll();
+
 }
 
 const service = new DevicesService();

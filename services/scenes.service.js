@@ -3,9 +3,20 @@ const Scene = require('../model/scene');
 const repo = require('../repository/scenes.repository');
 const houseRepo = require('../repository/houses.repository');
 
+const devicesService = require('./devices.service');
 const mqttMessageService = require('./mqtt-message.service');
 
 class ScenesService {
+    constructor() {
+        mqttMessageService.ready()
+          .then(devicesService.findAll)
+          .then((devices) => {
+             devices.forEach(device => {
+                 mqttMessageService.subscribe(device.ownerId, device._id, "state", this.#onChangeState);
+             });
+          });
+    }
+
     newScene = async (ownerId, houseId, scene) => {
         const existsHouse = await houseRepo.exists(ownerId, houseId);
         if (!existsHouse) {
@@ -39,6 +50,10 @@ class ScenesService {
         "condition.deviceId": deviceId,
         "condition.state": state
     });
+
+    #onChangeState = (ownerId, deviceId, state) => {
+        console.log(`Change state of: {owner: ${ownerId}, deviceId: ${deviceId}, state: ${state}}`);
+    }
 }
 
 const service = new ScenesService();
