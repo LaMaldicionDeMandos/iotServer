@@ -5,15 +5,18 @@ const houseRepo = require('../repository/houses.repository');
 const roomsRepo = require('../repository/rooms.repository');
 
 class DevicesService {
-    newDevice = async (ownerId, houseId, device) => {
+    #subscriber;
+    newDevice = async (ownerId, houseId, deviceDto) => {
         const existsHouse = await houseRepo.exists(ownerId, houseId);
         if (!existsHouse) {
             const house = await houseRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});
-            device.houseId = house._id;
+            deviceDto.houseId = house._id;
         } else {
-            device.houseId = houseId;
+            deviceDto.houseId = houseId;
         }
-        return repo.newDevice(ownerId, device);
+        const device = await repo.newDevice(ownerId, deviceDto);
+        if (this.#subscriber) this.#subscriber(device);
+        return device;
     }
 
     findMyDevices = (ownerId, houseId) => repo.findByOwnerIdAndHouseId(ownerId, houseId);
@@ -30,6 +33,10 @@ class DevicesService {
     }
 
     findAll = () => repo.findAll();
+
+    deviceSubscriber = (subscriber) => {
+        this.#subscriber = subscriber;
+    }
 
 }
 

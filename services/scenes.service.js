@@ -10,11 +10,8 @@ class ScenesService {
     constructor() {
         mqttMessageService.ready()
           .then(devicesService.findAll)
-          .then((devices) => {
-             devices.forEach(device => {
-                 mqttMessageService.subscribe(device.ownerId, device._id, "state", this.#onChangeState);
-             });
-          });
+          .then((devices) => devices.forEach(this.#subscribeDevice))
+          .then(() => devicesService.deviceSubscriber(this.#subscribeDevice));
     }
 
     newScene = async (ownerId, houseId, scene) => {
@@ -71,6 +68,10 @@ class ScenesService {
            console.log(`Scene: ${scene.name}`);
            this.#activateScene(scene);
         });
+    }
+
+    #subscribeDevice = (device) => {
+        mqttMessageService.subscribe(device.ownerId, device._id, "state", this.#onChangeState);
     }
 }
 
