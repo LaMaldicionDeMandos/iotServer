@@ -30,4 +30,8 @@ app.use('/users/me/houses/:houseId/devices', devicesRouter);
 app.use('/users/me/houses/:houseId/scenes', scenesRouter);
 app.use('/users/me/houses', placesRouter);
 
+const schedule = require('node-cron');
+const job = schedule.schedule('*/5 * 15 * * *', function(){
+  console.log('The answer to life, the universe, and everything!');
+}, {timezone: 'UTC'});
 module.exports = app;

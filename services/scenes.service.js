@@ -14,15 +14,19 @@ class ScenesService {
           .then(() => devicesService.deviceSubscriber(this.#subscribeDevice));
     }
 
-    newScene = async (ownerId, houseId, scene) => {
+    newScene = async (ownerId, houseId, sceneDto) => {
         const existsHouse = await houseRepo.exists(ownerId, houseId);
         if (!existsHouse) {
             const house = await houseRepo.findOneByQuery({ownerId: ownerId, isPrimary: true});
-            scene.houseId = house._id;
+            sceneDto.houseId = house._id;
         } else {
-            scene.houseId = houseId;
+            sceneDto.houseId = houseId;
         }
-        return repo.newScene(ownerId, scene);
+        const scene = await repo.newScene(ownerId, sceneDto);
+        if (scene.condition.type == 'schedule') {
+            console.log('Register job');
+        }
+        return scene;
     }
 
     updateScene = async (ownerId, scene) => {

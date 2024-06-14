@@ -46,10 +46,20 @@ const RoomSchema = new Schema({
     name: String,
 }, {timestamps: true});
 
+const ScheduleSchema = new Schema({
+    month: Number,
+    dayOfMonth: Number,
+    dayOfWeek: { type: String, enum: ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']},
+    hour: Number,
+    minute: Number,
+    timeZone: String
+});
+
 const SceneConditionSchema = new Schema({
-   type: {type: String, enum: ['touch', 'device_state']},
+   type: {type: String, enum: ['touch', 'device_state', 'schedule']},
    deviceId: String,
-   state: String
+   state: String,
+   schedules: [ScheduleSchema]
 });
 
 const SceneActionSchema = new Schema({
