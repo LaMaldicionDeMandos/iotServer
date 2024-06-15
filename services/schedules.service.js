@@ -1,5 +1,7 @@
 const schedule = require('node-cron');
 
+const TIME_ZONE_EXPRESION = /^([+-])(\d{2}):(\d{2})$/;
+
 class ScheduleService {
     #jobs;
     registerSchedule(scene, handler) {
@@ -20,8 +22,9 @@ class ScheduleService {
         let cron = {month, daysOfWeek, daysOfMonth, hours, minutes};
 
         const result = schedules.reduce((c, schedule) => {
+            const shift = this.#hasNotSupportedTimeZone(schedule.timeZone) ? this.#parseTimeZone(schedule.timeZone) : 0;
             c.minutes = this.#updateCronElement(c.minutes, schedule.minute, []);
-            c.hours = this.#updateCronElement(c.hours, schedule.hour, [c.minutes]);
+            c.hours = this.#updateCronElement(c.hours, schedule.hour !== undefined ? schedule.hour + shift : schedule.hour, [c.minutes]);
             c.daysOfWeek = this.#updateCronElement(c.daysOfWeek, schedule.dayOfWeek, []);
             c.daysOfMonth = this.#updateCronElement(c.daysOfMonth, schedule.dayOfMonth, [c.minutes, c.hours], c.daysOfWeek !== '?' && c.daysOfWeek !== '*');
             c.month = this.#updateCronElement(c.month, schedule.month, [c.minutes, c.hours, c.daysOfMonth, c.daysOfWeek]);
@@ -70,6 +73,19 @@ class ScheduleService {
         if (typeof current === "number") return current == newValue;
         return current.split(',').some((v) => v == newValue);
     }
+
+    #hasNotSupportedTimeZone(timeZone) {
+        return timeZone && timeZone.match(TIME_ZONE_EXPRESION);
+    }
+
+    #parseTimeZone(timeZone) {
+        const match = timeZone.match(TIME_ZONE_EXPRESION);
+
+        const sign = match[1] === '+' ? -1 : 1;
+        const hours = parseInt(match[2], 10);
+        return hours*sign;
+    }
+
 }
 
 const service = new ScheduleService();
@@ -90,6 +106,8 @@ errors+= test([{hour: 16, minute: 0}], '0 16 * * ?', 'Todos los Dias a las 16:00
 errors+= test([{minutesOfHour: 5}], '0/5 * * * ?', 'Todos los Dias cada 5 minutos');
 errors+= test([{daysOfMonth: 2, hour: 18, minute: 0}], '0 18 0/2 * ?', 'Cada dos Dias a las 18:00');
 
+errors+= test([{hour: 16, minute: 0, timeZone: 'America/Argentina/Buenos_Aires'}], '0 16 * * ?', 'Time zone soportada');
+errors+= test([{hour: 16, minute: 0, timeZone: '-03:00'}], '0 19 * * ?', 'Time zone -03:00');
 console.log(`${errors} errors`);
 
 module.exports = service;
