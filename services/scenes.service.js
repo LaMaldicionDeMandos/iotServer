@@ -5,6 +5,7 @@ const houseRepo = require('../repository/houses.repository');
 
 const devicesService = require('./devices.service');
 const mqttMessageService = require('./mqtt-message.service');
+const scheduleService = require('./schedules.service');
 
 class ScenesService {
     constructor() {
@@ -24,7 +25,7 @@ class ScenesService {
         }
         const scene = await repo.newScene(ownerId, sceneDto);
         if (scene.condition.type == 'schedule') {
-            console.log('Register job');
+            this.#registerSchedule(scene);
         }
         return scene;
     }
@@ -76,6 +77,10 @@ class ScenesService {
 
     #subscribeDevice = (device) => {
         mqttMessageService.subscribe(device.ownerId, device._id, "state", this.#onChangeState);
+    }
+
+    #registerSchedule(scene) {
+        scheduleService.registerSchedule(scene, this.#activateScene.bind(this));
     }
 }
 

@@ -48,10 +48,14 @@ const RoomSchema = new Schema({
 
 const ScheduleSchema = new Schema({
     month: Number,
+    monthsOfYear: Number,
     dayOfMonth: Number,
-    dayOfWeek: { type: String, enum: ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']},
+    dayOfWeek: { type: String, enum: ['SUN','MON','TUE','WED','THU','FRI','SAT']},
+    daysOfMonth: Number,
     hour: Number,
+    hoursOfDay: Number,
     minute: Number,
+    minutesOfDays: Number,
     timeZone: String
 });
 
